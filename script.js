@@ -8,8 +8,10 @@ var done;
 
 var pathcolor = 'rgba(50,255,50,1)';
 var wallcolor = 'rgba(255,255,255,1)';
-var highcolor = 'rgba(150,150,255,1)';
+var highcolor = 'rgba(50,50,255,1)';
+var minicolor = 'rgba(150,150,255,1)';
 var backcolor = 'rgba(51,51,51,1)';
+
 function setup(){
     var h = 600;
     var w = 600;
@@ -54,6 +56,9 @@ function draw(){
         current.highlight();
         current.visited = true;
         next = random(current.neighbors());
+        for(let i = 0; i < stack.length; i++){
+            stack[i].track();
+        }
         if(next){
             removeWalls(current, next);
             stack.push(current);

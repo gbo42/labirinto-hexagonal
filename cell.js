@@ -11,6 +11,19 @@ function cell(i, j){
     this.x = rzao+(dzao-rzao/2)*this.j;
     this.y = rzao+(dzinho*2*this.i)+(dzinho*(this.j%2));
 
+    this.track = function(color){
+        noStroke();
+        fill(minicolor);
+
+        beginShape();
+        for (var a = 0; a < TWO_PI; a += angle) {
+            var sx = this.x + cos(a) * rzao/2;
+            var sy = this.y + sin(a) * rzao/2;
+            vertex(sx, sy);
+        }
+        endShape(CLOSE);
+}
+
     this.highlight = function(){
         noStroke();
         fill(highcolor);
