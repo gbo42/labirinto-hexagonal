@@ -2,6 +2,8 @@ function cell(i, j){
     this.i = i;
     this.j = j;
 
+    this.parent;
+
     this.walls = new Array(6).fill(true);
 
     this.visited = false;
@@ -48,6 +50,65 @@ function cell(i, j){
             let nj = this.j + offsets[i][1]*m;
             if(grid[ni] && grid[ni][nj] && !grid[ni][nj].visited){
                 neighbors.push(grid[ni][nj]);
+            }
+        }
+
+        return neighbors;
+    }
+
+    this.freeNeighbors = function(){
+        let offsets = [[1, 1], [1, 0], [1, -1], [0, -1], [0, 1], [-1, 0]];
+        let m = this.j % 2 == 0 ? -1 : 1;
+
+        var neighbors = [];
+
+        for(let i = 0; i < 6; i++){
+            let ni = this.i + offsets[i][0]*m;
+            let nj = this.j + offsets[i][1]*m;
+            if(grid[ni] && grid[ni][nj] && !grid[ni][nj].visited){
+                let di = this.i - grid[ni][nj].i;
+                let dj = this.j - grid[ni][nj].j;
+                let wall;
+                if(this.j%2 == 0){
+                    if(di == 1){
+                        if(dj == 1){
+                            wall = this.walls[5];
+                        } else if(dj == -1){
+                            wall = this.walls[1];
+                        } else {
+                            wall = this.walls[0];
+                        }
+                    } else if (di == 0){
+                        if(dj == 1){
+                            wall = this.walls[4];
+                        } else {
+                            wall = this.walls[2];
+                        }
+                    } else {
+                        wall = this.walls[3];
+                    }
+                } else {
+                    if(di == -1){
+                        if(dj == -1){
+                            wall = this.walls[2];
+                        } else if(dj == +1){
+                            wall = this.walls[4];
+                        } else {
+                            wall = this.walls[3];
+                        }
+                    } else if(di == 0){
+                        if(dj == -1){
+                            wall = this.walls[1];
+                        } else {
+                            wall = this.walls[5];
+                        }
+                    } else {
+                        wall = this.walls[0];
+                    }
+                }
+                if(!wall){
+                    neighbors.push(grid[ni][nj]);
+                }
             }
         }
 
@@ -107,4 +168,14 @@ function removeWalls(a, b){
             b.walls[3] = false;
         }
     }
+}
+
+function pathTo(current){
+    stroke(120);
+    strokeWeight(10);
+    while(current.parent){
+        line(current.x, current.y, current.parent.x, current.parent.y);
+        current = current.parent;
+    }
+    strokeWeight(1);
 }

@@ -3,6 +3,8 @@ var angle;
 var cols, rows;
 var dzao, rzao, dzinho;
 var stack = [];
+var queue;
+var done;
 
 function setup(){
     var h = 600;
@@ -10,6 +12,7 @@ function setup(){
 
     createCanvas(w,h);
 
+    done = false;
     rows = 13;
     cols = 15;
     dzao = 50;
@@ -29,26 +32,54 @@ function setup(){
         }
     }
 
+    queue = new Queue();
+    queue.enqueue(grid[0][0]);
+    goal = grid[rows-1][cols-1];
     current = grid[0][0];
 }
 
 function draw(){
     background(51);
-    current.highlight();
-    current.visited = true;
-    next = random(current.neighbors());
-    if(next){
-        removeWalls(current, next);
-        stack.push(current);
-        current = next;
-    } else if(stack.length > 0){
-        current = stack.pop();
-    }
-
-
     for(let i = 0; i < rows; i++){
         for(let j = 0; j < cols; j++){
             grid[i][j].show();
+        }
+    }
+
+    if(!done){
+        current.highlight();
+        current.visited = true;
+        next = random(current.neighbors());
+        if(next){
+            removeWalls(current, next);
+            stack.push(current);
+            current = next;
+        } else if(stack.length > 0){
+            current = stack.pop();
+        } else {
+            done = true;
+            for(let i = 0; i < rows; i++){
+                for(let j = 0; j < cols; j++){
+                    grid[i][j].visited = false;
+                }
+            }
+        }
+    } else {
+        if(!queue.isEmpty()){
+            current = queue.dequeue();
+            current.visited = true;
+            var neighbors = current.freeNeighbors();
+            pathTo(current);
+            for(let i = 0; i < neighbors.length; i++){
+                neighbors[i].visited = true;
+                neighbors[i].parent = current;
+                queue.enqueue(neighbors[i]);
+
+                if(neighbors[i] == goal){
+                    pathTo(neighbors[i]);
+                    noLoop();
+                }
+            }
         }
     }
 }
