@@ -13,7 +13,7 @@ function cell(i, j){
 
     this.highlight = function(){
         noStroke();
-        fill(255);
+        fill(highcolor);
 
         beginShape();
         for (var a = 0; a < TWO_PI; a += angle) {
@@ -25,7 +25,7 @@ function cell(i, j){
     }
 
     this.show = function() {
-        stroke(255);
+        stroke(wallcolor);
         for (let i = 0; i < 6; i++) {
             if(this.walls[i]){
                 let a = (i+4)*angle;
@@ -171,7 +171,7 @@ function removeWalls(a, b){
 }
 
 function pathTo(current){
-    stroke(120);
+    stroke(pathcolor);
     strokeWeight(10);
     while(current.parent){
         line(current.x, current.y, current.parent.x, current.parent.y);

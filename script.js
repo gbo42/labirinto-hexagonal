@@ -6,6 +6,10 @@ var stack = [];
 var queue;
 var done;
 
+var pathcolor = 'rgba(50,255,50,1)';
+var wallcolor = 'rgba(255,255,255,1)';
+var highcolor = 'rgba(150,150,255,1)';
+var backcolor = 'rgba(51,51,51,1)';
 function setup(){
     var h = 600;
     var w = 600;
@@ -39,7 +43,7 @@ function setup(){
 }
 
 function draw(){
-    background(51);
+    background(backcolor);
     for(let i = 0; i < rows; i++){
         for(let j = 0; j < cols; j++){
             grid[i][j].show();
